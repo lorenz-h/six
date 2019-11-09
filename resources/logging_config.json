@@ -4,7 +4,7 @@
     "formatters":{
         "colored":{
             "class": "utils.logging._ColoredFormatter",
-            "format": "%(name)s - %(levelname)s - %(message)s"
+            "format": "%(process)s - %(processName)s - %(name)s - %(levelname)s - %(message)s"
         }
     },
     "handlers":{
