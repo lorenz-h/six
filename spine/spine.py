@@ -3,7 +3,7 @@ import signal
 import time
 import multiprocessing as mp
 
-from .module import start_module
+from .module_skeletons import start_module
 from .heartbeat import HeartBeat
 from utils import setup_console_output, check_platform_compatibility
 

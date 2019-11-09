@@ -1,6 +1,8 @@
-from spine.module import Module
+import logging
 
-class _GenericCommInterface(Module):
+from ..heartbeat import HeartBeat
+
+class GenericCommInterface:
     """
     This class is used to provide a layer of abstraction for spine.modules to use a communiation protocol such as mqtt.
     The client implementation for the protocol should inherit this class.
@@ -10,7 +12,8 @@ class _GenericCommInterface(Module):
 
     def __init__(self, name):
         self.name = name
-        super(_GenericCommInterface, self).__init__()
+        self.logger = logging.getLogger(f"six.modules.{self.name}")
+        self.hb = HeartBeat(self.name)
 
     def publish(self, msg, topic):
         raise NotImplementedError()

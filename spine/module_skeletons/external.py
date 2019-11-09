@@ -1,44 +1,16 @@
 import logging
 import os
 import signal
-import subprocess
 import time
+import subprocess
 
-from utils import setup_console_output
-from .heartbeat import HeartBeat
-
-def start_module(mod_constructor):
-    setup_console_output()
-    try:
-        module = mod_constructor()
-    except Exception:
-        logging.critical(f"Exeption occurred while creating module {mod_constructor}")
-        raise
-    try:
-        module.loop()
-    except Exception:
-        logging.critical(f"Expeption occurred in {module.name} module")
-        raise
-
-class Module:
-
-    name = "anonymous_module"
-    terminate = False
-
-    def __init__(self):
-        self.logger = logging.getLogger(f"six.modules.{self.name}")
-        self.hb = HeartBeat(self.name)
-    
-    def loop(self):
-        raise NotImplementedError("Module class is abstract")
-
+from .module import Module
 
 class ExternalModule(Module):
 
     name = "anonymous_ext_module"
 
     def __init__(self, cmd):
-        logging.info(f"Creating ExternalModule {self.name}")
         super(ExternalModule, self).__init__()
         self.proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid) 
 
