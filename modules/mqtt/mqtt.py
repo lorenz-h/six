@@ -1,16 +1,3 @@
-from spine.module import ExternalModule
-
-
-class MQTTBrokerModule(ExternalModule):
-    
-    name = "mqtt_broker"
-
-    def __init__(self, port=8000):
-        cmd ="mosquitto -p 8000"
-        super(MQTTBrokerModule, self).__init__(cmd)
-
-    
-
-class MQTTClient:
-    def __init__():
-        raise NotImplementedError()
+PORT = 8000
+KEEPALIVE = 60 #seconds
+WAIT_BEFORE_CONNECT = 3 #seconds
