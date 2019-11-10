@@ -1,8 +1,10 @@
-from modules.nlu import NLUModule
-
-from utils import setup_console_output
+import time
+import subprocess
+import os
 
 if __name__ == "__main__":
-    setup_console_output()
-    nlu = NLUModule()
-    nlu.loop()
+    proc = subprocess.Popen("mosquitto -p 8000", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid) 
+    while proc.poll() is None:
+        time.sleep(2)
+        print("ALIVE")
+    print("DEAD")

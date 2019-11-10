@@ -19,11 +19,19 @@ class ExternalModule(Module):
         self.proc.send_signal(signal.CTRL_BREAK_EVENT)
     
     def loop(self):
-        while self.proc.poll is not None: 
-            time.sleep(3)
-            self.hb.ping()
+        i = 0
+        time.sleep(6)
+        while self.proc.poll() is not None: 
+            time.sleep(0.5)
+            i += 1
+            if i > 20:
+                i = 0
+                self.hb.ping()
+        outs, errs = self.proc.communicate()
+        self.logger.critical(f"External module {self.name} is exiting because its subprocess is dead with:\n stdout {outs.decode('utf-8')} \n stderr {errs.decode('utf-8')}...")
 
     def __del__(self):
+        
         try:
             os.killpg(os.getpgid(self.proc.pid), signal.SIGTERM)
         except AttributeError:
