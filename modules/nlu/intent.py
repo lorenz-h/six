@@ -3,7 +3,7 @@ import os
 import json
 import re
 import typing
-NLTK_DIR = projpath("modules/nlu/nltk_data")
+NLTK_DIR = projpath("modules/nlu/resources/nltk_data")
 os.environ["NLTK_DATA"] = str(NLTK_DIR)
 
 import torch
