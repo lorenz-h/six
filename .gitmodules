@@ -1,0 +1,3 @@
+[submodule "modules/nlu/InferSent"]
+	path = modules/nlu/InferSent
+	url = https://github.com/facebookresearch/InferSent.git
