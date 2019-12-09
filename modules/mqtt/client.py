@@ -29,7 +29,7 @@ class MQTTInterface(GenericCommInterface):
     
     def _on_message(self, client, userdata, msg):
         try:
-            self.super_msg_callback(msg.topic, msg.payload.decode("utf-8"))
+            self.super_msg_callback(msg.topic, msg.payload)
         except Exception:
             self.logger.exception("MQTT Interface Message Callback Exeption")
 

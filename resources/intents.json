@@ -13,7 +13,7 @@
             "slots": [
                 {
                     "name": "location",
-                    "parser": "Room",
+                    "parser_type": "Room",
                     "required": false
                 }
             ],
@@ -21,6 +21,27 @@
                 "sure",
                 "turning the lights on.",
                 "no problem."
+            ]
+        },
+        {
+            "name": "SetTemperature",
+            "templates": [
+                "set the temperature in the [location] to [temperature] degrees",
+                "temperature [temperature] degrees in [location], please",
+                "set the temperature to [temperature]"
+               
+            ],
+            "slots": [
+                {
+                    "name": "location",
+                    "parser_type": "Room",
+                    "required": false
+                },
+                {
+                    "name": "temperature",
+                    "parser_type": "Temperature",
+                    "required": false
+                }
             ]
         }
        
