@@ -13,5 +13,5 @@ There are internal and external modules. Internal modules are written in python 
 - [x] Create a deterministic Intent parser using regex.
 - [ ] add a dialog manager, to manage responses
 - [x] allow user input through a chat box
-- [] create a TTS module
-- [] create ASR 
+- [ ] create a TTS module
+- [ ] create ASR 
