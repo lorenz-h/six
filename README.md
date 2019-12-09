@@ -7,3 +7,11 @@ All modules of six that run locally are connected by the Spine. This manages the
 
 ## Modules
 There are internal and external modules. Internal modules are written in python and are run in a multiprocessing Process. External modules are arbitrary executables that are run using the python subprocess module.
+
+## Todo
+- [x] Create Probabalistic Intent Parser based on InferSent and a vector space KNN Classifier
+- [x] Create a deterministic Intent parser using regex.
+- [ ] add a dialog manager, to manage responses
+- [x] allow user input through a chat box
+- [] create a TTS module
+- [] create ASR 
