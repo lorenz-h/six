@@ -27,8 +27,13 @@ def load_pretrained_parser(fpath):
 
 class Parser:
     def __init__(self, training_data):
+        self.logger = logging.getLogger("six_core.module.nlu.intent_parser")
+        self.logger.setLevel(logging.INFO)
+        self.logger.info("initializing...")
+
         with open(training_data, "r", encoding="utf-8") as fp:
             train_data = json.load(fp)
+
         self.sanitizer = str.maketrans('', '', r"""!"#$%&'()*+,-./:;<=>?@\^_`{|}~""")
         self.intents = {intent_spec["name"]: Intent(intent_spec, self.sanitize) for intent_spec in train_data["intents"]}
         self.intent_names = sorted([intent_name for intent_name in self.intents])
@@ -39,17 +44,17 @@ class Parser:
 
     def init_encoder(self):
         if not NLTK_DIR.is_dir():
-            logging.info("Downloading nltk data...")
+            self.logger.info("Downloading nltk data...")
             nltk.download("punkt", NLTK_DIR)
         version = 1
         model_path = projpath(f'modules/nlu/InferSent/encoder/infersent{version}.pkl')
         params_model = {'bsize': 64, 'word_emb_dim': 300, 'enc_lstm_dim': 2048, 'pool_type': 'max', 'dpout_model': 0.0, 'version': version}
         self.encoder = InferSent(params_model)
-        logging.info("Loading model...")
+        self.logger.info("Loading model...")
         self.encoder.load_state_dict(torch.load(model_path))
         w2v_path = projpath(f'modules/nlu/resources/GloVe/glove.840B.300d.txt')
         self.encoder.set_w2v_path(w2v_path)
-        logging.info("Building vocab...")
+        self.logger.info("Building vocab...")
         self.build_encoder_vocab()
 
     def get_samples(self):
@@ -65,21 +70,21 @@ class Parser:
     def deterministic_parse(self, statement) -> typing.Optional[Intent]:
         for intent in self.intents.values():
             if intent.regex.match(statement):
-                logging.info(f"Deterministic match with intent {intent.name}")
+                self.logger.info(f"Deterministic match with intent {intent.name}")
                 return intent
-        logging.info("Deterministic parsing did not match any intent.")
+        self.logger.info("Deterministic parsing did not match any intent.")
         return None
 
     def probabilistic_parse(self, statement) -> typing.Optional[Intent]:
         embedding = self.encode_statement(statement)
         outlier: bool = self.outlier_detector.predict(embedding)[0] == -1
         if outlier:
-            logging.info("Probabalistic Parse Detected Outlier!")
+            self.logger.info("Probabalistic Parse Detected Outlier!")
             return None
         else:
             intents_proba = self.classifier.predict_proba(embedding)
             intent_name = self.intent_names[np.argmax(intents_proba)]
-            logging.info(f"Probabalistic Parse found Intent {intent_name} with confidence {np.max(intents_proba)}")
+            self.logger.info(f"Probabalistic Parse found Intent {intent_name} with confidence {np.max(intents_proba)}")
             return self.intents[intent_name]
         
     def parse(self, statement):
@@ -92,7 +97,7 @@ class Parser:
 
     def sanitize(self, statement):
         clean_statement = statement.translate(self.sanitizer)
-        logging.debug(f"sanitized <{statement}> to <{clean_statement}>")
+        self.logger.debug(f"sanitized <{statement}> to <{clean_statement}>")
         return clean_statement
 
     def encode_statement(self, statement):
@@ -116,8 +121,8 @@ class Parser:
         np_train_feat = np_train_feat.reshape([np_train_feat.shape[0], np_train_feat.shape[2]])
         np_train_labels = np.array(train_labels)
 
-        logging.info("fitting knn and outlier model")
+        self.logger.info("fitting knn and outlier model")
         knn.fit(np_train_feat, np_train_labels)
         outlier_detector.fit(np_train_feat, np_train_labels)
-        logging.info("finished fitting knn and outlier model")
+        self.logger.info("finished fitting knn and outlier model")
         return knn, outlier_detector

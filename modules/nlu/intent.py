@@ -1,6 +1,8 @@
 import re
 import random
 import copy
+import logging
+import json
 
 
 class Slot:
@@ -17,10 +19,15 @@ class Slot:
             return round(raw_val, 1)
         else:
             raise ValueError(f"Invalid parser type {self.parser_type}")
-
+    
+    def __iter__(self):
+        yield "name", self.name
+        yield "parser_type", self.parser_type
+    
 
 class Intent:
     def __init__(self, spec: dict, sanitize_fn):
+        self.logger = logging.getLogger("six_core.module.nlu.intent")
         self.test(spec)
         self.name = spec["name"]
         self.slots = [Slot(slot_spec) for slot_spec in spec["slots"]]
@@ -38,6 +45,9 @@ class Intent:
         regex_str = '|'.join(regex_strs)
         return re.compile(regex_str, re.I)
 
+    def __str__(self):
+        return json.dumps({"name":self.name, "slots":[dict(slot) for slot in self.slots]})
+
     def gen_samples(self) -> list:
         samples = []
         for template in self.templates:
@@ -46,7 +56,7 @@ class Intent:
                 for slot in self.slots:
                     sample = sample.replace(f"[{slot.name}]", str(slot.get_random_value()))
 
-                logging.debug(f"created sample <{sample}>")
+                self.logger.debug(f"created sample <{sample}>")
                 samples.append(sample)
         return samples
 
