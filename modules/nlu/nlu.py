@@ -1,6 +1,6 @@
 import pickle
 
-from spine.module_skeletons import InternalModule
+from ...spine.module_skeletons import InternalModule
 from .parser import Parser
 
 class NLUModule(InternalModule):

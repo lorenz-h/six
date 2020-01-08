@@ -3,7 +3,7 @@ import os
 import signal
 import time
 
-from utils import setup_console_output
+from ...utils import setup_console_output
 from ..heartbeat import HeartBeat
 
 def start_module(mod_constructor):

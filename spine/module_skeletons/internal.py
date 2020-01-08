@@ -1,6 +1,6 @@
 import time
 import logging
-from modules.mqtt import MQTTInterface as CommInterface
+from ...modules.mqtt import MQTTInterface as CommInterface
 
 from .module import Module
 

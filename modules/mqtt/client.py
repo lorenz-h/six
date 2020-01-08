@@ -2,7 +2,7 @@ import time
 
 import paho.mqtt.client as paho_mqtt
 
-from spine.comm_skeletons import GenericCommInterface
+from ...spine.comm_skeletons import GenericCommInterface
 from .mqtt import PORT, KEEPALIVE, WAIT_BEFORE_CONNECT
 
 class MQTTInterface(GenericCommInterface):

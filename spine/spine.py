@@ -5,7 +5,7 @@ import multiprocessing as mp
 
 from .module_skeletons import start_module
 from .heartbeat import HeartBeat
-from utils import setup_console_output, check_platform_compatibility
+from ..utils import setup_console_output, check_platform_compatibility
 
 class Spine:
     terminate = False

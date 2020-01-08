@@ -1,4 +1,4 @@
-from spine.module_skeletons import ExternalModule
+from ...spine.module_skeletons import ExternalModule
 
 class MQTTBrokerModule(ExternalModule):
     

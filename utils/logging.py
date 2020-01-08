@@ -2,7 +2,7 @@ import logging
 import logging.config
 import json
 
-from utils import projpath
+from ..utils import projpath
 
 def setup_console_output(min_level="INFO"):
     config_fpath = projpath("resources/logging_config.json")

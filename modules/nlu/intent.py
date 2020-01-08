@@ -46,7 +46,7 @@ class Intent:
                 for slot in self.slots:
                     sample = sample.replace(f"[{slot.name}]", str(slot.get_random_value()))
 
-                print(f"created sample <{sample}>")
+                logging.debug(f"created sample <{sample}>")
                 samples.append(sample)
         return samples
 
